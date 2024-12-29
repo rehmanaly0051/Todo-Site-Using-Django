@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+      .card {
+        background: skyblue;
+        margin-bottom: 5%;
+        border-radius: 25px;
+        padding: 2%;
+        overflow: auto;
+        text-overflow: ellipsis;
+      }
+      
+      .submit_form {
+        text-align: center;
+        padding: 3%;
+        background: lightpink;
+        border-radius: 25px;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info">
+          <strong>{{ message }}</strong>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <center>
+            <h1>__TODO LIST__</h1>
+          </center>
+          <hr />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          {% for i in list %}
+            <div class="card">
+              <center>
+                <b>{{ i.title }}</b>
+              </center>
+              <hr />
+              {{ i.date }}
+              <hr />
+              {{ i.details }}
+              <br /><br />
+
+              <!-- Remove Button -->
+              <form action="{% url 'delete_todo' i.id %}" method="POST" style="float: right; margin-left: 10px;">
+                {% csrf_token %}
+                <button value="remove" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-trash"></span> &nbsp;Remove</button>
+              </form>
+
+              <!-- Edit Button -->
+              <form action="{% url 'edit_todo' i.id %}" method="GET" style="float: right;">
+                <button value="edit" type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> &nbsp;Edit</button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="col-md-4">
+          <div class="submit_form">
+            <form action="{% url 'add_todo' %}" method="post">
+              {% csrf_token %}
+              {{ forms }}
+              <center>
+                <input type="submit" value="submit" class="btn btn-default" />
+              </center>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
